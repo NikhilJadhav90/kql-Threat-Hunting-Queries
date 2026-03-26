@@ -5,3 +5,12 @@ logs_network_labs_CL
 | summarize count() by url_full_s, url_domain_s, url_path_s
 | where count_ > 5
 | sort by count_ desc
+
+
+```kql
+// Hunt: Find IEX-based in-memory staging
+logs_powershell_lab_CL
+| where PayloadData2_s has "IEX"
+| project TimeCreated_t, PayloadData2_s
+| sort by TimeCreated_t asc
+```
