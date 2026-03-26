@@ -1,0 +1,7 @@
+// MITRE ATT&CK: T1071 - Application Layer Protocol (C2)
+
+// Detect high-frequency beaconing (possible C2 masquerading)
+logs_network_labs_CL
+| summarize count() by url_full_s, url_domain_s, url_path_s
+| where count_ > 5
+| sort by count_ desc
