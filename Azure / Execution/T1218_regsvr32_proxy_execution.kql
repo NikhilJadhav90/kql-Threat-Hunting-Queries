@@ -1,0 +1,9 @@
+// MITRE ATT&CK: T1218 - Signed Binary Proxy Execution (regsvr32)
+
+// Detect suspicious regsvr32 execution
+logs_edr_labs_CL
+| where event_action_s == "process-start"
+| where process_name_s =~ "regsvr32.exe"
+| project timestamp, user_name_s, process_name_s,
+          process_parent_name_s, body_s
+| sort by timestamp asc
