@@ -1,5 +1,14 @@
 // MITRE ATT&CK: T1055 / T1112 - PowerShell Registry Staging
 
+```kql
+// Hunt 7: Encoded PowerShell around shellcode attempt window
+logs_edr_labs_CL
+| extend ts = todatetime(timestamp_s)
+| where ts >= datetime(2023-07-05T06:45:00Z) and ts <= datetime(2023-07-05T06:50:00Z)
+| where process_name_s == "powershell.exe"
+| project timestamp_s, process_name_s, process_command_line_s, body_s, process_pid_d
+```
+
 // Correlate PowerShell activity with registry staging
 logs_powershell_lab_CL
 | where TimeCreated_t between (datetime(2023-07-04T20:19:00Z)
