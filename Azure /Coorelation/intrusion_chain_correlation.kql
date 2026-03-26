@@ -1,0 +1,14 @@
+// Multi-stage intrusion detection: proxy execution + PowerShell + staging
+
+logs_edr_labs_CL
+| extend ts = todatetime(timestamp_s)
+| where ts between (datetime(2023-07-04T20:19:00Z)
+               .. datetime(2023-07-04T20:21:00Z))
+| extend cmd = coalesce(process_command_line_s, body_s)
+| where
+    (process_name_s =~ "regsvr32.exe")
+    or (process_name_s =~ "mshta.exe")
+    or (process_name_s =~ "powershell.exe"
+        and cmd has "IEX")
+| project ts, process_name_s, process_parent_name_s, cmd
+| sort by ts asc
